@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>recall | flashcards</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="js/storage.js" defer></script>
+  <script src="js/study.js" defer></script>
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <button id="homeButton" class="brand" type="button" aria-label="go back to the page with all the decks i have made">recall<span>.</span></button>
+    <span class="little-note">yo silly little flashcards or something</span>
+    <span class="local-badge">changes only last in this tab for now</span>
+  </header>
+  <main>
+    <p id="notice" class="notice" role="status" aria-live="polite"></p>
+    <section id="libraryScreen" aria-labelledby="libraryHeading">
+      <div class="page-title">
+        <div><p class="eyebrow">deck library</p><h1 id="libraryHeading" tabindex="-1">your decks</h1>
+          <p class="muted">goofy ahh cards that are better than quizlet</p></div>
+        <button id="sampleButton" hidden class="secondary" type="button">load goat set</button>
+      </div>
+      <form id="deckForm" hidden class="new-deck">
+        <label for="deckName">deck name</label>
+        <div class="form-row"><input id="deckName" maxlength="100" autocomplete="off" placeholder="name your deck">
+          <button type="submit">create deck</button></div>
+      </form>
+      <div class="section-label"><h2>your decks</h2><span id="deckTotal"></span></div>
+      <p id="emptyLibrary" class="empty">there arent any decks here yet, so add one or load the goat set to try it out.</p>
+      <div id="deckList" class="deck-grid"></div>
+      <section class="backup-box" hidden aria-labelledby="backupHeading">
+        <div><h2 id="backupHeading">backups</h2><p>download a copy of your decks if you want a backup, or bring one back without replacing the decks you already have.</p></div>
+        <div class="backup-actions"><button id="exportButton" class="secondary" type="button">export backup</button>
+          <label class="file-label" for="importFile">import backup</label><input id="importFile" type="file" accept=".json,application/json"></div>
+      </section>
+    </section>
+
+    <section id="editorScreen" aria-labelledby="editorHeading" hidden>
+      <button id="backButton" class="text-button" type="button">back to decks</button>
+      <div class="page-title"><div><p class="eyebrow">deck editor</p><h1 id="editorHeading" tabindex="-1"></h1>
+        <p id="editorCount" class="muted"></p></div>
+        <div><label class="check-label" hidden><input id="shuffleBox" type="checkbox"> shuffle cards</label>
+          <button id="studyButton" hidden type="button">study deck</button><p id="emptyStudyNote" class="muted small"></p></div>
+      </div>
+      <form id="renameForm" hidden class="rename-row"><label for="renameName">deck name</label>
+        <input id="renameName" maxlength="100"><button class="secondary" type="submit">rename deck</button></form>
+      <div class="editor-layout" hidden>
+        <form id="cardForm" class="panel">
+          <h2 id="cardFormHeading">add a card</h2>
+          <label for="questionInput">question</label><textarea id="questionInput" rows="4" maxlength="5000" placeholder="what do you want to remember?"></textarea>
+          <label for="answerInput">answer</label><textarea id="answerInput" rows="4" maxlength="5000" placeholder="write the answer here"></textarea>
+          <div class="form-row"><button id="saveCardButton" type="submit">add card</button><button id="cancelEditButton" class="secondary" type="button" hidden>cancel edit</button></div>
+        </form>
+        <div><div class="search-box" hidden><label for="cardSearch">search cards</label><input id="cardSearch" type="search" placeholder="search questions or answers"></div>
+          <p id="noCards" class="empty"></p><div id="cardList" class="card-list"></div></div>
+      </div>
+    </section>
+
+    <section id="studyScreen" aria-labelledby="studyHeading" hidden>
+      <div class="study-top"><button id="leaveStudyButton" class="text-button" type="button">leave round</button><span id="studyProgress"></span></div>
+      <div id="studyCard" class="study-card">
+        <p class="eyebrow" id="studyDeckName"></p><h1 id="studyHeading" tabindex="-1">study cards</h1>
+        <p id="studyQuestion" class="question"></p><p id="studyAnswer" class="answer" hidden></p>
+        <button id="revealButton" type="button">show answer</button>
+        <div id="answerButtons" class="answer-buttons" hidden><button id="missedButton" class="secondary" type="button">missed it</button><button id="correctButton" type="button">got it</button></div>
+      </div>
+      <div id="results" class="results" hidden>
+        <p class="eyebrow">finished round</p><h2 id="resultsHeading" tabindex="-1">round results</h2><p id="resultMessage"></p>
+        <div class="scores"><p><strong id="correctTotal"></strong>the number of cards i managed to get right</p><p><strong id="missedTotal"></strong>the number of cards i still need to go over again</p><p><strong id="accuracyTotal"></strong>how much of that round i managed to get right</p></div>
+        <div class="result-actions"><button id="retryButton" type="button">retry missed cards</button><button id="againButton" class="secondary" type="button">study again</button><button id="doneButton" class="text-button" type="button">back to deck</button></div>
+      </div>
+      <p hidden id="keyInstructions" class="keyboard-help">you can also use Space to show an answer, then 1 for correct or 2 for missed.</p>
+    </section>
+  </main>
+  <footer>saving isnt finished yet, so reloading this version will clear the changes you make.</footer>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* just enough css so stuff isnt all stuck together */
+[hidden] { display:none !important; }
+body { font-family:Arial; margin:24px; color:#222; background:#eaf4ff; }
+header { border-bottom:1px solid black; padding-bottom:12px; }
+button { margin:4px; }
+input { padding:4px; }
+label { display:block; margin-top:10px; }
+textarea { display:block; width:90%; max-width:600px; }
+.deck-tile { border:1px solid #888; padding:10px; margin:12px 0; max-width:650px; }
+.saved-card { border-bottom:1px solid #bbb; padding:8px; }
+.notice { color:darkblue; min-height:20px; }
+.little-note { margin-left:8px; }
+.local-badge { display:block; font-size:12px; margin-top:8px; }
+footer { font-size:12px; margin-top:35px; color:#666; }
