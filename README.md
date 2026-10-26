@@ -8,6 +8,7 @@ I have been building this with plain HTML, CSS and JavaScript. Open index.html i
 
 - open the goat set and move between the screens
 - make decks, change their names, and remove decks
+- add, edit, and delete cards while checking both sides
 
 Saving between visits is not built yet, so reloading the page clears changes.
 

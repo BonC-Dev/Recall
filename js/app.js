@@ -47,14 +47,11 @@ function renderLibrary() {
 }
 
 function openDeck(id) {
-  activeId = id; renderEditor(); showScreen("editor"); say("");
-}
-
-function renderEditor() {
-  var d=currentDeck(); if (!d) return;
-  el("editorHeading").textContent=d.name;
-  el("editorCount").textContent=d.cards.length + " cards";
-  el("renameName").value=d.name;
+  activeId = id;
+  editingId = null;
+  el("cardSearch").value = "";
+  resetCardForm(); renderEditor(); showScreen("editor");
+  say("");
 }
 
 // deck actions
@@ -84,10 +81,79 @@ function deleteDeck(id) {
   renderLibrary(); saveEverything("the deck and its cards have been removed from your list.");
 }
 
+// card stuff
+function resetCardForm() {
+  editingId = null;
+  el("cardForm").reset(); el("cardFormHeading").textContent = "add a card";
+  el("saveCardButton").textContent = "add card"; el("cancelEditButton").hidden = true;
+}
+
+function renderEditor() {
+  var d = currentDeck(); if (!d) return;
+  el("editorHeading").textContent = d.name;
+  el("renameName").value = d.name;
+  el("editorCount").textContent = d.cards.length + (d.cards.length === 1 ? " card ready to practice" : " cards ready to practice");
+  el("studyButton").disabled = d.cards.length === 0;
+  el("emptyStudyNote").textContent = d.cards.length ? "" : "add at least one card before starting a study round.";
+  var search = "";
+  var shown = d.cards.filter(function(c) { return (c.question + " " + c.answer).toLowerCase().includes(search) });
+  el("noCards").textContent = d.cards.length === 0 ? "there arent any cards in this deck yet, so add a question and answer to get started." : "nothing matched that search, so try a different word from the question or answer.";
+  el("noCards").hidden = shown.length > 0;
+  var list = el("cardList"); list.replaceChildren();
+  shown.forEach(function(card) {
+    var box = document.createElement("article"); box.className = "saved-card";
+    var q = document.createElement("h3"); q.textContent = card.question;
+    var a = document.createElement("p"); a.textContent = card.answer.length > 140 ? card.answer.slice(0,140) + "..." : card.answer;
+    var actions = document.createElement("div"); actions.className = "tile-actions";
+    var edit = document.createElement("button"); edit.type="button"; edit.className="secondary"; edit.textContent="edit";
+    edit.setAttribute("aria-label", "Edit card: " + card.question.slice(0,80)); edit.onclick = function() { editCard(card.id) };
+    var del = document.createElement("button"); del.type="button"; del.className="text-button danger"; del.textContent="delete";
+    del.setAttribute("aria-label", "Delete card: " + card.question.slice(0,80)); del.onclick = function() { deleteCard(card.id) };
+    actions.append(edit,del); box.append(q,a,actions); list.append(box);
+  });
+}
+
+function saveCard(event) {
+  event.preventDefault();
+  var d=currentDeck(); if (!d) return;
+  var q=el("questionInput").value.trim(); var a=el("answerInput").value.trim();
+  if (!q || !a) { say("fill in both sides of the card before adding it to the deck."); return }
+  if (q.length > 5000 || a.length > 5000) { say("one of those boxes has more than 5000 characters in it so i need to make it a bit shorter before adding the card"); return }
+  if (editingId) {
+    var old=d.cards.find(function(c) { return c.id === editingId });
+    if (!old) { say("the card i was changing is not in this deck anymore so i need to start another one instead of trying to save over it"); resetCardForm(); return }
+    old.question=q; old.answer=a;
+  } else {
+    var total=decks.reduce(function(n,deck) { return n+deck.cards.length },0);
+    if (total >= 20000) { say("there are already 20000 cards across these decks so i need to remove some before i can add another one"); return }
+    d.cards.push({ id:makeId(), question:q, answer:a });
+  }
+  resetCardForm(); renderEditor(); renderLibrary(); saveEverything("your card is saved in the deck with the question and answer you entered."); el("questionInput").focus();
+}
+
+function editCard(id) {
+  var d=currentDeck(); if (!d) return;
+  var c=d.cards.find(function(item) { return item.id === id }); if (!c) return;
+  editingId=id; el("questionInput").value=c.question; el("answerInput").value=c.answer;
+  el("cardFormHeading").textContent="edit card"; el("saveCardButton").textContent="save changes";
+  el("cancelEditButton").hidden=false; el("questionInput").focus();
+}
+
+function deleteCard(id) {
+  var d=currentDeck(); if (!d) return;
+  var c=d.cards.find(function(item) { return item.id === id });
+  if (!c || !confirm('Delete the card "' + c.question.slice(0,80) + '"?')) return;
+  d.cards=d.cards.filter(function(item) { return item.id !== id });
+  if (editingId === id) resetCardForm();
+  renderEditor(); renderLibrary(); saveEverything("the card has been removed and the other cards are still in the deck.");
+}
+
 // hook everything up
 var loaded=loadDecks(); decks=loaded.decks;
 el("deckForm").addEventListener("submit",createDeck);
 el("renameForm").addEventListener("submit",renameDeck);
+el("cardForm").addEventListener("submit",saveCard);
+el("cancelEditButton").onclick=resetCardForm;
 el("homeButton").onclick=function() { if (showScreen("library")) renderLibrary() };
 el("backButton").onclick=function() { if (showScreen("library")) renderLibrary() };
 renderLibrary();
