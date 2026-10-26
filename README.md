@@ -7,6 +7,7 @@ I have been building this with plain HTML, CSS and JavaScript. Open index.html i
 ## What works so far
 
 - open the goat set and move between the screens
+- make decks, change their names, and remove decks
 
 Saving between visits is not built yet, so reloading the page clears changes.
 
