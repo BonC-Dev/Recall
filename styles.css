@@ -62,3 +62,6 @@ textarea { resize:vertical; min-height:105px; }
 .keyboard-help { text-align:center; font-size:13px; color:var(--muted); }
 #studyDeckName { overflow-wrap:anywhere; }footer { max-width:1120px; margin:auto; padding:22px 28px; border-top:1px solid var(--line); font-size:13px; }
 @media(max-width:720px) { .topbar,main,footer { padding-left:18px; padding-right:18px; }.local-badge { margin-left:0; }.page-title,.backup-box { align-items:flex-start; flex-direction:column; }.editor-layout { grid-template-columns:1fr; }.backup-actions { flex-wrap:wrap; }.rename-row { flex-wrap:wrap; }.study-card,.results { padding:22px; }.question { font-size:24px; }.scores { gap:22px; } }
+* {
+  font-family: "Comic Sans MS", "Comic Sans", cursive !important;
+}
