@@ -12,6 +12,7 @@ I have been building this with plain HTML, CSS and JavaScript. Open index.html i
 - use the light blue layout on wider and smaller screens
 - save and restore decks in this browser
 - go through a study round and see the results
+- retry the cards that were missed or mix their order
 
 The decks are saved in this browser, so clearing browser data can still remove them.
 

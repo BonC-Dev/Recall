@@ -153,7 +153,7 @@ function beginStudy(cards) {
   var d=currentDeck(); if (!d) return;
   var list=cards || d.cards;
   if (!list.length) { say("there arent any cards to put in this round, so i need to go back and add some before trying again"); return }
-  studyRound=makeStudyRound(list,false);
+  studyRound=makeStudyRound(list,el("shuffleBox").checked);
   say(""); showScreen("study"); drawStudy();
 }
 
@@ -168,7 +168,7 @@ function drawStudy() {
     el("missedTotal").textContent=score.missed;
     el("accuracyTotal").textContent=score.accuracy + "%";
     el("resultMessage").textContent=score.missed === 0 ? "i got through all " + r.cards.length + " cards without marking any of them wrong, so i can either have another go or go back to the deck" : "i got " + score.correct + " out of " + r.cards.length + " right this time, and there are " + score.missed + " that i can try again without going through the whole deck";
-    el("retryButton").hidden=true;
+    el("retryButton").hidden=score.missed === 0;
     el("keyInstructions").hidden=true;
     el("resultsHeading").focus();
   } else {
@@ -198,6 +198,7 @@ el("studyButton").onclick=function() { beginStudy() };
 el("revealButton").onclick=revealAnswer;
 el("correctButton").onclick=function() { markAnswer(true) };
 el("missedButton").onclick=function() { markAnswer(false) };
+el("retryButton").onclick=function() { var missed=retryCards(studyRound); beginStudy(missed) };
 el("againButton").onclick=function() { beginStudy() };
 el("doneButton").onclick=function() { renderEditor(); showScreen("editor") };
 el("leaveStudyButton").onclick=function() { if (showScreen("editor")) renderEditor() };
