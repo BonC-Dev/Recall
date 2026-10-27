@@ -21,7 +21,7 @@
       <div class="page-title">
         <div><p class="eyebrow">deck library</p><h1 id="libraryHeading" tabindex="-1">your decks</h1>
           <p class="muted">goofy ahh cards that are better than quizlet</p></div>
-        <button id="sampleButton" hidden class="secondary" type="button">load goat set</button>
+        <button id="sampleButton" class="secondary" type="button">load goat set</button>
       </div>
       <form id="deckForm" class="new-deck">
         <label for="deckName">deck name</label>
@@ -31,7 +31,7 @@
       <div class="section-label"><h2>your decks</h2><span id="deckTotal"></span></div>
       <p id="emptyLibrary" class="empty">there arent any decks here yet, so add one or load the goat set to try it out.</p>
       <div id="deckList" class="deck-grid"></div>
-      <section class="backup-box" hidden aria-labelledby="backupHeading">
+      <section class="backup-box" aria-labelledby="backupHeading">
         <div><h2 id="backupHeading">backups</h2><p>download a copy of your decks if you want a backup, or bring one back without replacing the decks you already have.</p></div>
         <div class="backup-actions"><button id="exportButton" class="secondary" type="button">export backup</button>
           <label class="file-label" for="importFile">import backup</label><input id="importFile" type="file" accept=".json,application/json"></div>
@@ -54,7 +54,7 @@
           <label for="answerInput">answer</label><textarea id="answerInput" rows="4" maxlength="5000" placeholder="write the answer here"></textarea>
           <div class="form-row"><button id="saveCardButton" type="submit">add card</button><button id="cancelEditButton" class="secondary" type="button" hidden>cancel edit</button></div>
         </form>
-        <div><div class="search-box" hidden><label for="cardSearch">search cards</label><input id="cardSearch" type="search" placeholder="search questions or answers"></div>
+        <div><div class="search-box"><label for="cardSearch">search cards</label><input id="cardSearch" type="search" placeholder="search questions or answers"></div>
           <p id="noCards" class="empty"></p><div id="cardList" class="card-list"></div></div>
       </div>
     </section>
@@ -72,7 +72,7 @@
         <div class="scores"><p><strong id="correctTotal"></strong>the number of cards i managed to get right</p><p><strong id="missedTotal"></strong>the number of cards i still need to go over again</p><p><strong id="accuracyTotal"></strong>how much of that round i managed to get right</p></div>
         <div class="result-actions"><button id="retryButton" type="button">retry missed cards</button><button id="againButton" class="secondary" type="button">study again</button><button id="doneButton" class="text-button" type="button">back to deck</button></div>
       </div>
-      <p hidden id="keyInstructions" class="keyboard-help">you can also use Space to show an answer, then 1 for correct or 2 for missed.</p>
+      <p id="keyInstructions" class="keyboard-help">you can also use Space to show an answer, then 1 for correct or 2 for missed.</p>
     </section>
   </main>
   <footer>your cards stay in this browser, so keep a backup if you want another copy.</footer>

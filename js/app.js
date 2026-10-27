@@ -95,7 +95,7 @@ function renderEditor() {
   el("editorCount").textContent = d.cards.length + (d.cards.length === 1 ? " card ready to practice" : " cards ready to practice");
   el("studyButton").disabled = d.cards.length === 0;
   el("emptyStudyNote").textContent = d.cards.length ? "" : "add at least one card before starting a study round.";
-  var search = "";
+  var search = el("cardSearch").value.trim().toLowerCase();
   var shown = d.cards.filter(function(c) { return (c.question + " " + c.answer).toLowerCase().includes(search) });
   el("noCards").textContent = d.cards.length === 0 ? "there arent any cards in this deck yet, so add a question and answer to get started." : "nothing matched that search, so try a different word from the question or answer.";
   el("noCards").hidden = shown.length > 0;
@@ -177,7 +177,7 @@ function drawStudy() {
     el("studyQuestion").textContent=c.question;
     el("studyAnswer").textContent=c.answer; el("studyAnswer").hidden=!r.revealed;
     el("revealButton").hidden=r.revealed; el("answerButtons").hidden=!r.revealed;
-    el("keyInstructions").hidden=true;
+    el("keyInstructions").hidden=false;
     if (r.revealed) el("correctButton").focus();
     else el("revealButton").focus();
   }
@@ -186,12 +186,74 @@ function drawStudy() {
 function revealAnswer() { if (revealStudyCard(studyRound)) drawStudy() }
 function markAnswer(correct) { if (answerStudyCard(studyRound,correct)) drawStudy() }
 
+// backup buttons
+function exportBackup() {
+  var data=makeBackup(decks);
+  var url=URL.createObjectURL(new Blob([data],{type:"application/json"}));
+  var link=document.createElement("a"); link.href=url;
+  link.download="recall-backup-" + new Date().toISOString().slice(0,10) + ".json";
+  document.body.append(link); link.click(); link.remove();
+  setTimeout(function() { URL.revokeObjectURL(url) },1000);
+  say("the backup has been downloaded so i can keep that copy somewhere i will hopefully remember when i need it");
+}
+
+async function importBackup(event) {
+  var input=event.target; var file=input.files[0]; if (!file) return;
+  input.disabled=true;
+  try {
+    if (file.size > 5000000) throw new Error("the backup needs to be smaller than 5 MB before i can bring its decks into this page");
+    var text=await file.text();
+    var oldCount=decks.length;
+    var next=readBackup(text,decks);
+    decks=next; renderLibrary();
+    saveEverything("Added " + (decks.length-oldCount) + " deck copies. Your earlier decks are still here.");
+  } catch (err) { say("Import stopped: " + err.message + " Your existing decks were kept.") }
+  finally { input.value=""; input.disabled=false }
+}
+
+// sample deck
+function loadSample() {
+  var existing=decks.find(function(d) { return d.sampleKey === "recall-starter-v1" });
+  if (existing) { openDeck(existing.id); say("the goat set is already in my list so i opened that one instead of putting another copy in here"); return }
+  if (decks.length >= 300 || decks.reduce(function(n,d) { return n+d.cards.length },0) > 19997) {
+    say("there isnt enough room for another copy of the goat set so i need to make a backup and remove some old cards before adding it"); return;
+  }
+  var examples=[
+    ["Am I the goat?","Yes"],
+    ["Is pixl the goat?","maybe, probably lol"],
+    ["is capcut the goat","nah, premier pro would mog"]
+  ];
+  var deck={id:makeId(),name:"goat set",cards:[],createdAt:new Date().toISOString(),sampleKey:"recall-starter-v1"};
+  examples.forEach(function(pair) { deck.cards.push({id:makeId(),question:pair[0],answer:pair[1]}) });
+  decks.push(deck); renderLibrary(); saveEverything("Sample added. Open it whenever you want a quick round.");
+}
+
+// keyboard bits
+function studyKeys(event) {
+  if (currentScreen !== "study" || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
+  var target=event.target;
+  if (target && (target.matches("input, textarea, select") || target.isContentEditable)) return;
+  if (!studyRound || studyRound.position >= studyRound.cards.length) return;
+  if (event.code === "Space") {
+    event.preventDefault(); if (!studyRound.revealed) revealAnswer();
+  } else if (event.key === "1" || event.key === "2") {
+    event.preventDefault(); markAnswer(event.key === "1");
+  }
+}
+
+function warnBeforeClose(event) {
+  if (currentScreen === "study" && studyRound && studyRound.position < studyRound.cards.length) {
+    event.preventDefault(); event.returnValue="";
+  }
+}
+
 // hook everything up
 var loaded=loadDecks(); decks=loaded.decks;
 el("deckForm").addEventListener("submit",createDeck);
 el("renameForm").addEventListener("submit",renameDeck);
 el("cardForm").addEventListener("submit",saveCard);
 el("cancelEditButton").onclick=resetCardForm;
+el("cardSearch").addEventListener("input",renderEditor);
 el("homeButton").onclick=function() { if (showScreen("library")) renderLibrary() };
 el("backButton").onclick=function() { if (showScreen("library")) renderLibrary() };
 el("studyButton").onclick=function() { beginStudy() };
@@ -202,5 +264,10 @@ el("retryButton").onclick=function() { var missed=retryCards(studyRound); beginS
 el("againButton").onclick=function() { beginStudy() };
 el("doneButton").onclick=function() { renderEditor(); showScreen("editor") };
 el("leaveStudyButton").onclick=function() { if (showScreen("editor")) renderEditor() };
+el("exportButton").onclick=exportBackup;
+el("importFile").addEventListener("change",importBackup);
+el("sampleButton").onclick=loadSample;
+document.addEventListener("keydown",studyKeys);
+window.addEventListener("beforeunload",warnBeforeClose);
 renderLibrary();
 if (loaded.notice) say(loaded.notice);

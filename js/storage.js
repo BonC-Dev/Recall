@@ -63,3 +63,38 @@ function starterDecks() {
     createdAt:"2026-01-01T00:00:00.000Z"};
   return [starter]
 }
+
+// backups
+function makeBackup(list) {
+  validateDecks(list);
+  return JSON.stringify({ version: 1, decks: list }, null, 2);
+}
+
+function readBackup(text, existing) {
+  if (typeof text !== "string" || text.length > 5000000) throw new Error("the backup needs to be smaller than 5 MB before i can bring its decks into this page");
+  var backup;
+  try { backup = JSON.parse(text) } catch (err) { throw new Error("i couldnt read that file as a backup so i need to choose one that was downloaded from this app") }
+  if (!backup || backup.version !== 1) throw new Error("that backup seems to use a format this version doesnt know how to read yet");
+  validateDecks(backup.decks);
+  var used = [];
+  existing.forEach(function(d) {
+    used.push(d.id);
+    d.cards.forEach(function(c) { used.push(c.id) });
+  });
+  function freshId() {
+    for (var attempt = 0; attempt < 100; attempt++) {
+      var id = makeId();
+      if (!used.includes(id)) { used.push(id); return id }
+    }
+    throw new Error("i couldnt make a new identifier for the copied cards so i need to try bringing the backup in again");
+  }
+  var copies = backup.decks.map(function(d) {
+    return {
+      id: freshId(), name: d.name.trim(), createdAt: new Date().toISOString(),
+      cards: d.cards.map(function(c) { return { id: freshId(), question: c.question, answer: c.answer } })
+    };
+  });
+  var joined = existing.concat(copies);
+  validateDecks(joined);
+  return joined;
+}
