@@ -10,3 +10,6 @@ HTML, CSS, and Javascript. I didn't use any external libraries or anything.
 ## How to Run It
 Download or clone the repo, and then just open index.html lol
 There are also tests I added that you can run from node.js by running "node tests/check.cjs"
+
+
+More features could be added soon, Comic Sans font for the funnies
