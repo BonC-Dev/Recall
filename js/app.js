@@ -11,7 +11,7 @@ function currentDeck() { return decks.find(function(d) { return d.id === activeI
 
 function showScreen(name) {
   if (currentScreen === "study" && name !== "study" && studyRound && studyRound.position < studyRound.cards.length) {
-    if (!confirm("if i go back now this round will stop here, but the cards themselves will still be in the deck when i come back")) return false;
+    if (!confirm("if I go back now this round will stop here (cards will still be saved)")) return false;
     studyRound = null;
   }
   ["library", "editor", "study"].forEach(function(s) { el(s + "Screen").hidden = s !== name });
@@ -167,7 +167,7 @@ function drawStudy() {
     el("correctTotal").textContent=score.correct;
     el("missedTotal").textContent=score.missed;
     el("accuracyTotal").textContent=score.accuracy + "%";
-    el("resultMessage").textContent=score.missed === 0 ? "i got through all " + r.cards.length + " cards without marking any of them wrong, so i can either have another go or go back to the deck" : "i got " + score.correct + " out of " + r.cards.length + " right this time, and there are " + score.missed + " that i can try again without going through the whole deck";
+    el("resultMessage").textContent=score.missed === 0 ? "I got through all " + r.cards.length + " cards without marking any of them wrong, so i can either have another go or go back to the deck" : "I got " + score.correct + " out of " + r.cards.length + " right this time, and there are " + score.missed + " that i can try again without going through the whole deck";
     el("retryButton").hidden=score.missed === 0;
     el("keyInstructions").hidden=true;
     el("resultsHeading").focus();
@@ -194,7 +194,7 @@ function exportBackup() {
   link.download="recall-backup-" + new Date().toISOString().slice(0,10) + ".json";
   document.body.append(link); link.click(); link.remove();
   setTimeout(function() { URL.revokeObjectURL(url) },1000);
-  say("the backup has been downloaded so i can keep that copy somewhere i will hopefully remember when i need it");
+  say("the backup has been downloaded so I can keep a copy of it");
 }
 
 async function importBackup(event) {
