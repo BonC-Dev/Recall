@@ -11,6 +11,7 @@ I have been building this with plain HTML, CSS and JavaScript. Open index.html i
 - add, edit, and delete cards while checking both sides
 - use the light blue layout on wider and smaller screens
 - save and restore decks in this browser
+- go through a study round and see the results
 
 The decks are saved in this browser, so clearing browser data can still remove them.
 
