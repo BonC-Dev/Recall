@@ -10,7 +10,8 @@ I have been building this with plain HTML, CSS and JavaScript. Open index.html i
 - make decks, change their names, and remove decks
 - add, edit, and delete cards while checking both sides
 - use the light blue layout on wider and smaller screens
+- save and restore decks in this browser
 
-Saving between visits is not built yet, so reloading the page clears changes.
+The decks are saved in this browser, so clearing browser data can still remove them.
 
 Backups, card search and keyboard shortcuts are still not implemented yet.

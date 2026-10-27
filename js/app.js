@@ -22,8 +22,8 @@ function showScreen(name) {
 }
 
 function saveEverything(message) {
-  saveDecks(decks);
-  say(message || "the change is showing in this tab, but saving between visits isnt ready yet.");
+  if (saveDecks(decks)) say(message || "your changes are saved in this browser so they should be here when you come back.");
+  else say("the browser couldnt save that change, so keep this tab open and export a backup before closing it.");
 }
 
 // library
