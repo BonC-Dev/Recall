@@ -20,6 +20,7 @@ Recall is a browser-based flashcard app made with HTML, CSS, and JavaScript. You
 
 ### Screenshots
 <img width="1287" height="897" alt="image" src="https://github.com/user-attachments/assets/0c1be09d-26ee-4019-8ff9-fdd6fee13013" />
+
 ## Getting Started
 
 ### Dependencies
