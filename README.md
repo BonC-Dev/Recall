@@ -4,7 +4,9 @@ A simple flashcard website for creating decks, studying questions, and practicin
 
 ## Description
 
-Recall is a browser-based flashcard app made with HTML, CSS, and JavaScript. You can create and rename decks, add questions and answers, edit existing cards, and search through a deck. During a study round, you reveal each answer and mark whether you remembered it. Recall shows your results and lets you retry missed cards or shuffle the next round. Decks are saved in your browser, and JSON backup import and export let you keep another copy or transfer your decks between browsers. No account or backend server is required.
+Recall is a browser-based flashcard app built with HTML, CSS, and JS. You can make decks, edit decks, edit cards, search for cards in a deck, and download your decks. During a study round, you can participate in study rounds, where you reveal the answer and select whether you remembered it. Recall lets you go through the cards you missed, and shuffle them for the next round. You can export your data to JSON so you 
+can use it in another browser or just to keep a copy. 
+
 
 ### Features
 
@@ -32,7 +34,6 @@ Recall is a browser-based flashcard app made with HTML, CSS, and JavaScript. You
 2. Extract the ZIP into a folder on your computer.
 3. Keep `index.html`, `styles.css`, and the `js` folder together.
 
-No changes to the source files are needed.
 
 ### Executing the program
 
@@ -66,6 +67,10 @@ The tests cover deck and card validation, storage, study rounds, shuffle, retry,
 - **A backup will not import:** Use a JSON backup exported by Recall. Invalid files are rejected with an error message.
 
 Export a backup regularly if you want to keep a separate copy of your decks. More features coming soon!
+
+## Why I built this
+
+When studying for a test at school, I used to use Quizlet to quickly memorize my terms. However, the platform is flooded with ads; and even with an ad blocker on, the site still used more than 1.5 gb of ram on my macbook air m1 base model. That's why I wanted to build an extremely light version with basic functionalities. 
 
 ## License
 
